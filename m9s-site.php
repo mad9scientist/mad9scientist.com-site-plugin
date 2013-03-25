@@ -189,7 +189,7 @@ function m9s_redirect_svc() {
 	);
 
 	$rewrite = array(
-		'slug'                => '/',
+		'slug'                => 'm',
 		'with_front'          => false,
 		'pages'               => false,
 		'feeds'               => false,
