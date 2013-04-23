@@ -26,8 +26,8 @@ remove_action('wp_head', 'adjacent_posts_rel_link', 10, 0);
 function jQuery_inject(){
 	if(!is_admin()){
 		wp_deregister_script( 'jquery' );
-	    wp_register_script( 'jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',false,'1.9.1',true);
-	    wp_enqueue_script( 'jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',false,'1.9.1',true ); 
+	    wp_register_script( 'jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',false,null,true);
+	    wp_enqueue_script( 'jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',false,null,true ); 
 	}
 }
 
@@ -38,7 +38,7 @@ function jQuery_bkp(){
 }
 
 add_action('wp_footer', 'jQuery_inject', 1);
-add_action('wp_footer', 'jQuery_bkp', 20);
+//add_action('wp_footer', 'jQuery_bkp', 20);
 
 function core_m9s_js(){
 	echo "<script src='";
@@ -75,7 +75,7 @@ add_filter('login_errors',create_function('$a', "return null;"));
 function m9s_portfolio_cpt(){
 	 $labels = array(
 		'name'               => 'Portfolio',
-		'singular_name'      => 'Peice',
+		'singular_name'      => 'Piece',
 		'menu_name'          => 'Portfolio',
 		'parent_item_colon'  => 'Parent Item:',
 		'all_items'          => 'All Items',
