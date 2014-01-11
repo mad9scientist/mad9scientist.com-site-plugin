@@ -26,8 +26,8 @@ remove_action('wp_head', 'adjacent_posts_rel_link', 10, 0);
 function jQuery_inject(){
 	if(!is_admin()){
 		wp_deregister_script( 'jquery' );
-	    wp_register_script( 'jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',false,null,true);
-	    wp_enqueue_script( 'jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',false,null,true ); 
+	    wp_register_script( 'jquery', '//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',false,null,true);
+	    wp_enqueue_script( 'jquery', '//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',false,null,true ); 
 	}
 }
 
@@ -37,8 +37,9 @@ function jQuery_bkp(){
 <?php
 }
 
-add_action('wp_footer', 'jQuery_inject', 1);
-//add_action('wp_footer', 'jQuery_bkp', 20);
+//add_action('wp_footer', 'jQuery_inject', 1);
+add_action('wp_enqueue_scripts', 'jQuery_inject', 1);
+add_action('wp_footer', 'jQuery_bkp', 20);
 
 function core_m9s_js(){
 	echo "<script src='";
@@ -64,6 +65,22 @@ function m9s_comment_control_links($id) {
 		echo ' <a class="spam" href="'.get_bloginfo('wpurl').'/wp-admin/comment.php?action=cdc&dt=spam&c='.$id.'">Spam</a>';
 	}
 } 
+
+
+# Add Link Post Options
+
+// Enable Post Formats for WP 3.1+
+// Options: 'aside','chat','gallery','image','link','quote','status','video','audio'
+add_theme_support('post-formats',array('link'));
+
+// filter post title for tumblr links
+function sd_link_filter($link, $post) {
+     if (has_post_format('link', $post) && get_post_meta($post->ID, 'LinkFormatURL', true)) {
+          $link = get_post_meta($post->ID, 'LinkFormatURL', true);
+     }
+     return $link;
+}
+add_filter('post_link', 'sd_link_filter', 10, 2);
 
 # Security
 // No Announcing of for Fail Login
@@ -219,7 +236,58 @@ function m9s_redirect_svc() {
 	register_post_type( 'm9s_redirector', $args );
 }
 
+## Link Post | Register Custom Post Type
+/*
+function m9s_link_cpt(){
+	 $labels = array(
+		'name'               => 'Link Posts',
+		'singular_name'      => 'Link Post',
+		'menu_name'          => 'Link Posts',
+		'parent_item_colon'  => 'Parent Item:',
+		'all_items'          => 'All Items',
+		'view_item'          => 'View Link Posts',
+		'add_new_item'       => 'Add New Link Post',
+		'add_new'            => 'New Link Post',
+		'edit_item'          => 'Edit Link Post',
+		'update_item'        => 'Update Link Post',
+		'search_items'       => 'Search Link Posts',
+		'not_found'          => 'No items found',
+		'not_found_in_trash' => 'No items found in Trash',
+	 );
+
+	 $rewrite = array(
+		'slug'       =>	'links',
+		'with_front' => true,
+		'pages'      => true,
+		'feeds'      => false,
+	 );
+
+	 $args = array(
+		'label'               => 'm9s_link_post',
+		'description'         => 'Manage Link Posts.',
+		'labels'               => $labels,
+		'supports'            => array( 'title', 'editor', 'excerpt', 'author', 'revisions', 'custom-fields',),
+		'hierarchical'        => true,
+		'public'              => true,
+		'show_ui'             => true,
+		'show_in_menu'        => true,
+		'show_in_nav_menus'   => true,
+		'show_in_admin_bar'   => true,
+		'menu_position'       => 25,
+		'menu_icon'           => '/m9s/wp-content/plugins/m9s-site/icons/linkpost.png',
+		'can_export'          => true,
+		'has_archive'         => true,
+		'exclude_from_search' => false,
+		'publicly_queryable'  => true,
+		'rewrite'             => $rewrite,
+		'capability_type'     => 'post',
+	  );
+
+	 register_post_type( 'm9s_portfolio', $args );
+}
+*/
 // Hook into the 'init' action
 add_action( 'init', 'm9s_redirect_svc', 0 );
 add_action( 'init', 'm9s_portfolio_cpt', 0 );
 add_action( 'init', 'm9s_projects_cpt', 0 );
+##add_action( 'init', 'm9s_link_cpt', 0 );
