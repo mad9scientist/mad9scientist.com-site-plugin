@@ -355,6 +355,51 @@ function admin_init(){
 		"normal", "core");
 }
 
+
+# Setup Transients for Footer Links
+$M9S_TimeToLive = WEEK_IN_SECONDS * 2;
+## social media
+if(false === ($value = get_transient('socialmedia-ftlinks'))){
+	set_transient('socialmedia-ftlinks', transientsFooterLinks('social'), $M9S_TimeToLive );
+}
+
+## shoutout
+if(false === ($value = get_transient('shoutout-ftlinks'))){
+	set_transient('shoutout-ftlinks', transientsFooterLinks('shoutout'), $M9S_TimeToLive );
+}
+
+## ventures
+// if(false === ($value = get_transient('ventures-ftlinks'))){
+// 	set_transient('ventures-ftlinks', transientsFooterLinks('ventures'), $M9S_TimeToLive );
+// }
+
+
+function transientsFooterLinks($linkType){
+	switch ($linkType) {
+		case 'social':
+			$social = wp_list_bookmarks('category=3&title_li=&categorize=0&echo=0');
+			return $social;
+			break;
+		case 'shoutout':
+			$shoutout = wp_list_bookmarks('category=4&title_li=&categorize=0&echo=0');
+			return $shoutout;
+			break;
+		case 'ventures':
+			// $ventures = wp_list_bookmarks('category=5&title_li=&categorize=0&echo=0&before=&after=');
+			// return $ventures;
+			break;
+		case 'bio':
+			// This is in the theme function file
+			break;
+		default:
+			// Nothing Match, exit without doing anything
+			break;
+	}
+}
+
+
+
+
 # Theme Development Functions
 
 $themeDev = false;
