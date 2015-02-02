@@ -125,7 +125,7 @@ function m9s_portfolio_cpt(){
 		'show_in_nav_menus'   => true,
 		'show_in_admin_bar'   => true,
 		'menu_position'       => 25,
-		'menu_icon'           => '/m9s/wp-content/plugins/m9s-site/icons/portfolio.png',
+		'menu_icon'           => plugins_url( 'icons/portfolio.png' , __FILE__ ),
 		'can_export'          => true,
 		'has_archive'         => true,
 		'exclude_from_search' => false,
@@ -175,7 +175,7 @@ function m9s_projects_cpt(){
 		'show_in_nav_menus'   => true,
 		'show_in_admin_bar'   => true,
 		'menu_position'       => 25,
-		'menu_icon'           => '/m9s/wp-content/plugins/m9s-site/icons/projects.png',
+		'menu_icon'           => plugins_url( 'icons/projects.png' , __FILE__ ),
 		'can_export'          => true,
 		'has_archive'         => true,
 		'exclude_from_search' => false,
@@ -185,6 +185,37 @@ function m9s_projects_cpt(){
 	  );
 
 	 register_post_type( 'm9s_projects', $args );
+}
+
+### Custom Fields for Projects
+
+add_action('admin_init', 'admin_init');
+add_action('save_post', 'project_Metadata_Save');
+
+function admin_init(){
+	add_meta_box("project-metadata", "Project Attributes", "m9s_projects_cpt_meta_opt","m9s_projects", "side", "low");
+}
+
+function m9s_projects_cpt_meta_opt(){
+	global $post;
+	$custom      = get_post_custom($post->ID);
+	$repoLink    = $custom['m9s_repo_link'][0];
+	$licenseType = $custom['m9s_license_type'][0];
+	$demoLink    = $custom['m9s_demo_url'][0];
+	$projectImg  = $custom['m9s_project_img'][0];
+
+	echo "<p><label for='m9s_repo_link' >Project Code Repository </label></p> <p><input id='m9s_repo_link' name='m9s_repo' type='url' value='$repoLink' /></p>";
+	echo "<p><label for='m9s_license_type' >Project License </label></p> <p><input id='m9s_license_type' name='m9s_license'  type='text' value='$licenseType' /></p>";
+	echo "<p><label for='m9s_demo_url' >Demo URL </label></p> <p><input id='m9s_demo_url' name='m9s_demo'  type='url' value='$demoLink' /></p>";
+	echo "<p><label for='m9s_project_img' >Project Image URL </label></p> <p><input id='m9s_project_img' name='m9s_proj_img'  type='url' value='$projectImg' /></p>";
+}
+
+function project_Metadata_Save(){
+	global $post;
+	update_post_meta($post->ID, 'm9s_repo_link', $_POST['m9s_repo']);
+	update_post_meta($post->ID, 'm9s_license_type', $_POST['m9s_license']);
+	update_post_meta($post->ID, 'm9s_demo_url', $_POST['m9s_demo']);
+	update_post_meta($post->ID, 'm9s_project_img', $_POST['m9s_proj_img']);
 }
 
 ## URL Redirection | Register Custom Post Type
@@ -224,7 +255,7 @@ function m9s_redirect_svc() {
 		'show_in_nav_menus'   => true,
 		'show_in_admin_bar'   => true,
 		'menu_position'       => 25,
-		'menu_icon'           => '/m9s/wp-content/plugins/m9s-site/icons/url.png',
+		'menu_icon'           => plugins_url( 'icons/url.png' , __FILE__ ),
 		'can_export'          => true,
 		'has_archive'         => false,
 		'exclude_from_search' => true,
@@ -291,3 +322,34 @@ add_action( 'init', 'm9s_redirect_svc', 0 );
 add_action( 'init', 'm9s_portfolio_cpt', 0 );
 add_action( 'init', 'm9s_projects_cpt', 0 );
 ##add_action( 'init', 'm9s_link_cpt', 0 );
+
+# Theme Development Functions
+
+$themeDev = false;
+
+if($themeDev){
+
+	# Database Queries Echo to Site.
+	add_action( 'wp_footer', 'tcb_note_server_side_page_speed' );
+
+	function tcb_note_server_side_page_speed() {
+		date_default_timezone_set( get_option( 'timezone_string' ) );
+		$stats  = '[ ' . date( 'Y-m-d H:i:s T' ) . ' ] ';
+		$stats .= 'Page created in ';
+		$stats .= timer_stop( $display = 0, $precision = 2 );
+		$stats .= ' seconds from ';
+		$stats .= get_num_queries();
+		$stats .= ' queries';
+
+		global $wpdb;
+		echo "<pre><code class='php-lang'>";
+		var_dump($wpdb->queries);
+		echo "<hr />$stats";
+		echo "</code></pre>";
+
+		if( ! current_user_can( 'administrator' ) ) $content = "\n<!-- $stats -->\n\n";
+		echo $content;
+	}
+
+
+}
