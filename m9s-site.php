@@ -137,6 +137,26 @@ function m9s_portfolio_cpt(){
 	 register_post_type( 'm9s_portfolio', $args );
 }
 
+### Custom Fields for Projects
+
+add_action('save_post', 'portfolio_Metadata_Save');
+
+function m9s_portfolio_cpt_meta_opt(){
+	global $post;
+	$custom      = get_post_custom($post->ID);
+	$projectType    = $custom['m9s_project_type'][0];
+	
+	echo "<p><label for='m9s_project_type' >Project Type(s) </label></p>
+	<p>
+		<textarea id='m9s_project_type' name='m9s_projectType' style='width:100%; height:125px'>$projectType</textarea>
+	</p>";
+}
+
+function portfolio_Metadata_Save(){
+	global $post;
+	update_post_meta($post->ID, 'm9s_project_type', $_POST['m9s_projectType']);
+}
+
 
 ## Projects | Register Custom Post Type
 function m9s_projects_cpt(){
@@ -189,12 +209,8 @@ function m9s_projects_cpt(){
 
 ### Custom Fields for Projects
 
-add_action('admin_init', 'admin_init');
 add_action('save_post', 'project_Metadata_Save');
 
-function admin_init(){
-	add_meta_box("project-metadata", "Project Attributes", "m9s_projects_cpt_meta_opt","m9s_projects", "side", "low");
-}
 
 function m9s_projects_cpt_meta_opt(){
 	global $post;
@@ -322,6 +338,22 @@ add_action( 'init', 'm9s_redirect_svc', 0 );
 add_action( 'init', 'm9s_portfolio_cpt', 0 );
 add_action( 'init', 'm9s_projects_cpt', 0 );
 ##add_action( 'init', 'm9s_link_cpt', 0 );
+
+# Hook custom fields into admin
+add_action('admin_init', 'admin_init');
+
+function admin_init(){
+	add_meta_box("project-metadata", 
+		"Project Attributes",
+		 "m9s_projects_cpt_meta_opt",
+		 "m9s_projects", 
+		 "side", "low");
+	add_meta_box("portfolio-metadata", 
+		"Portfolio Metadata", 
+		"m9s_portfolio_cpt_meta_opt",
+		"m9s_portfolio", 
+		"normal", "core");
+}
 
 # Theme Development Functions
 
