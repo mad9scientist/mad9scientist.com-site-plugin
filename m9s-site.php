@@ -56,10 +56,10 @@ function m9s_comment_control_links($id) {
 	if (current_user_can('edit_post')) {
 		echo ' <a class="edit" href="'.get_bloginfo('wpurl').'/wp-admin/comment.php?action=editcomment&c='.$id.'">Edit</a>';
 
-		echo '<a class="feature-comments feature" title="Feature" data-comment_id="'.$id.'" data-do="feature">Feature</a>
-		<a class="feature-comments unfeature feature" title="Unfeature" data-comment_id="'.$id.'" data-do="unfeature">Unfeature</a>';
-		echo '<a class="feature-comments bury" title="Bury" data-comment_id="'.$id.'" data-do="bury">Bury</a>
-		<a class="feature-comments unbury bury" title="Unbury" data-comment_id="'.$id.'" data-do="unbury">Unbury</a>';
+		// echo '<a class="feature-comments feature" title="Feature" data-comment_id="'.$id.'" data-do="feature">Feature</a>
+		// <a class="feature-comments unfeature feature" title="Unfeature" data-comment_id="'.$id.'" data-do="unfeature">Unfeature</a>';
+		// echo '<a class="feature-comments bury" title="Bury" data-comment_id="'.$id.'" data-do="bury">Bury</a>
+		// <a class="feature-comments unbury bury" title="Unbury" data-comment_id="'.$id.'" data-do="unbury">Unbury</a>';
 
 		echo ' <a class="del" href="'.get_bloginfo('wpurl').'/wp-admin/comment.php?action=cdc&c='.$id.'">Delete</a> ';
 		echo ' <a class="spam" href="'.get_bloginfo('wpurl').'/wp-admin/comment.php?action=cdc&dt=spam&c='.$id.'">Spam</a>';
