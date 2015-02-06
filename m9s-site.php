@@ -358,6 +358,17 @@ function admin_init(){
 
 # Setup Transients for Footer Links
 $M9S_TimeToLive = WEEK_IN_SECONDS * 2;
+
+## Setup Hook to refresh transient for links on link - Update, Creation, Delete
+function refreshFooterData(){
+	delete_transient('socialmedia-ftlinks');
+	delete_transient('shoutout-ftlinks');
+	delete_transient('bio-ftlinks');
+}
+add_action('add_link', 'refreshFooterData');
+add_action('delete_link', 'refreshFooterData');
+add_action('edit_link', 'refreshFooterData');
+
 ## social media
 if(false === ($value = get_transient('socialmedia-ftlinks'))){
 	set_transient('socialmedia-ftlinks', transientsFooterLinks('social'), $M9S_TimeToLive );
