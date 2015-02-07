@@ -33,7 +33,7 @@ function jQuery_inject(){
 
 function jQuery_bkp(){
 ?>
-<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.0.min.js"><\/script>')</script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-2.1.3.min.js"><\/script>')</script>
 <?php
 }
 
