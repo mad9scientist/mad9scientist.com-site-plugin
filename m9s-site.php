@@ -33,7 +33,7 @@ function jQuery_inject(){
 
 function jQuery_bkp(){
 ?>
-<script>window.jQuery || document.write('<script src="js/vendor/jquery-2.1.3.min.js"><\/script>')</script>
+<script>window.jQuery || document.write('<script src="/m9s/wp-content/themes/mad9scientist-2g/js/vendor/jquery-2.1.3.min.js"><\/script>')</script>
 <?php
 }
 
@@ -44,7 +44,7 @@ add_action('wp_footer', 'jQuery_bkp', 20);
 function core_m9s_js(){
 	echo "<script src='";
 	echo bloginfo('template_directory');
-	echo "/js/core.mad9scientist.com.js'></script>";
+	echo "/js/dist/core.mad9scientist.com.js'></script>";
 }
 add_action( 'wp_footer', 'core_m9s_js', 25);
 
