@@ -84,7 +84,10 @@ add_filter('post_link', 'sd_link_filter', 10, 2);
 
 # Security
 // No Announcing of for Fail Login
-add_filter('login_errors',create_function('$a', "return null;"));
+function m9s_login_failure(){
+	return "Login Fail, Try Again.";
+}
+add_filter('login_errors', 'm9s_login_failure' );
 
 # Custom Post Types
 
